@@ -2,25 +2,46 @@
 
 import inquirer from "inquirer";
 
-let todos:string[] = [];
-let condition:boolean = true;
+let todoArr = [];
+do {
+  let response = await inquirer.prompt({
+    name: "user",
+    message: "Select Operation: ",
+    type: "list",
+    choices: ["Add Task", "Delete task", "View All", "Exit"],
+  });
 
-while (condition) {
-    let todosQuest = await inquirer.prompt([
-        {
-            name:"firstQuest",
-            type:"input",
-            message:"What do you want to add in your todos ?"
-        },
-        {
-            name:"secondQuest",
-            type:"confirm",
-            message:"Would you like to add more ?",
-            default:"true"
-        }
-    ]);
-    todos.push(todosQuest.firstQuest);
-    condition = todosQuest.secondQuest;
-    console.log(todos);
-    
-}
+  let action = response.user;
+
+  switch (action) {
+    case "Add Task":
+      let response = await inquirer.prompt({
+        name: "todoAdd",
+        message: "Write Task: ",
+        type: "input",
+      });
+      const addTodo = response.todoAdd;
+      todoArr.push(addTodo);
+      console.log("Added Successfully");
+
+      break;
+    case "Delete task":
+      console.log(todoArr);
+      let response2 = await inquirer.prompt({
+        name: "deleteTodo",
+        message: "Select Index Number to Delete ",
+        type: "number",
+      });
+      let delTodo = response2.deleteTodo;
+      todoArr.splice(delTodo, 1);
+      console.log("Deleted SuccessFully");
+
+      break;
+    case "View All":
+      console.log(todoArr);
+      break;
+    case "Exit":
+      console.log("Exiting...");
+      process.exit();
+  }
+} while (true);
